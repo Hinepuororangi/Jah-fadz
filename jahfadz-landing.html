@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Jah Fadz — Māori Barber</title>
+<meta name="theme-color" content="#0B0B0C" />
+<meta name="description" content="Cuts with pride. Book your barber online in under a minute." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Archivo+Black&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+<style>
+  :root{
+    --ink:#0B0B0C; --panel:#141416; --line:rgba(212,175,106,0.16);
+    --gold:#D4AF6A; --gold-dim:#8C744B; --paua:#3EC6C6; --white:#F4F2EE; --grey:#9C9A96;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;background:var(--ink);color:var(--white);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Archivo Black','Inter',sans-serif;font-weight:400;letter-spacing:-0.01em;text-transform:uppercase;margin:0;}
+  p{margin:0;line-height:1.6;color:var(--grey);}
+  .eyebrow{color:var(--gold);letter-spacing:0.22em;font-size:12px;font-weight:700;text-transform:uppercase;}
+  .wrap{max-width:520px;margin:0 auto;padding:0 22px;}
+  .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:17px 22px;border:1px solid var(--gold);border-radius:4px;background:var(--gold);color:var(--ink);font-weight:700;font-size:14px;letter-spacing:0.06em;text-transform:uppercase;transition:box-shadow .25s;}
+  .btn:hover{box-shadow:0 0 26px rgba(212,175,106,0.45);}
+  .btn.ghost{background:transparent;color:var(--white);}
+  .btn.ghost:hover{background:var(--gold);color:var(--ink);}
+
+  .top{padding:34px 0 8px;text-align:center;}
+  .brand{display:flex;flex-direction:column;align-items:center;gap:8px;}
+  .brand-mark{width:44px;height:44px;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:'Archivo Black';font-size:15px;}
+  .brand .name{font-size:14px;letter-spacing:0.06em;}
+  .brand .sub{font-size:9px;letter-spacing:0.24em;color:var(--gold);}
+
+  .hero{position:relative;padding:28px 0 30px;text-align:center;}
+  .hero-visual{position:relative;aspect-ratio:5/4;border-radius:6px;overflow:hidden;margin-bottom:24px;
+    background:radial-gradient(circle at 30% 20%, rgba(212,175,106,0.14), transparent 55%), linear-gradient(160deg,#1c1c1f,#0d0d0e 70%);
+    border:1px solid var(--line);}
+  .hero-visual svg{position:absolute;inset:0;width:100%;height:100%;}
+  .hero h1{font-size:clamp(36px,10vw,52px);line-height:0.98;margin:6px 0 16px;}
+  .hero h1 .accent{color:var(--gold);}
+  .hero p.lead{font-size:15px;max-width:320px;margin:0 auto 26px;}
+
+  .quickpick{display:flex;flex-direction:column;gap:8px;margin-bottom:22px;}
+  .pick{border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;transition:border-color .2s,background .2s;cursor:pointer;}
+  .pick:hover{border-color:var(--gold-dim);background:rgba(212,175,106,0.05);}
+  .pick.selected{border-color:var(--gold);background:rgba(212,175,106,0.09);}
+  .pick .n{font-weight:600;font-size:14px;}
+  .pick .d{font-size:11px;color:var(--grey);}
+  .pick .p{color:var(--gold);font-weight:700;font-size:13px;}
+
+  .trust{display:flex;justify-content:center;gap:22px;padding:22px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:24px 0;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--grey);}
+  .trust b{display:block;color:var(--gold);font-size:18px;font-family:'Archivo Black';letter-spacing:0;}
+
+  .info{padding:26px 0 40px;text-align:center;}
+  .info .row{font-size:13px;color:var(--grey);margin-bottom:8px;}
+  .info a{color:var(--white);text-decoration:none;}
+
+  .sticky-cta{position:sticky;bottom:0;background:linear-gradient(180deg, rgba(11,11,12,0), var(--ink) 30%);padding:18px 0 22px;}
+
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(3px);z-index:200;display:flex;align-items:flex-end;justify-content:center;}
+  @media(min-width:768px){.overlay{align-items:center;}}
+  .panel{background:var(--panel);border:1px solid var(--line);width:100%;max-width:480px;max-height:92vh;overflow-y:auto;border-radius:8px 8px 0 0;padding:24px 20px 30px;}
+  @media(min-width:768px){.panel{border-radius:8px;padding:30px;}}
+  .phead{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+  .pclose{background:none;border:none;color:var(--grey);font-size:20px;}
+  .time-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
+  .time-slot{border:1px solid var(--line);border-radius:6px;padding:11px 4px;text-align:center;font-size:13px;cursor:pointer;transition:all .2s;}
+  .time-slot:hover{border-color:var(--gold-dim);}
+  .time-slot.selected{background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:700;}
+  .field{margin-bottom:12px;}
+  .field label{display:block;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--grey);margin-bottom:6px;}
+  .field input{width:100%;background:var(--ink);border:1px solid var(--line);border-radius:6px;padding:12px 14px;color:var(--white);font-size:14px;}
+  .field input:focus{outline:none;border-color:var(--gold);}
+  .confirm{text-align:center;padding:10px 0;}
+  .confirm .check{width:52px;height:52px;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--gold);}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+const {useState, useMemo} = React;
+
+/* Same seed data as main build — swap for live Supabase later if this page graduates past a campaign landing page */
+const SERVICES = [
+  { id: "s1", name: "Haircut", price: 40, duration_minutes: 40 },
+  { id: "s4", name: "Hot Towel Shave", price: 35, duration_minutes: 30 },
+  { id: "s2", name: "Beard Trim", price: 25, duration_minutes: 20 },
+];
+
+function CarvingMark(props){
+  return (
+    <svg viewBox="0 0 200 260" {...props}>
+      <path d="M100 10 C60 40 150 60 90 100 C40 130 160 150 90 190 C50 215 150 235 100 250" fill="none" stroke="#D4AF6A" strokeOpacity="0.35" strokeWidth="2.2" />
+      <path d="M120 30 C90 55 160 75 110 110 C70 140 170 160 110 195" fill="none" stroke="#3EC6C6" strokeOpacity="0.22" strokeWidth="1.6" />
+    </svg>
+  );
+}
+const Check = (p) => (<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" {...p}><path d="M4 12l5 5L20 6"/></svg>);
+const Arrow = (p) => (<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" {...p}><path d="M5 12h14M13 6l6 6-6 6"/></svg>);
+
+function generateSlots(duration){
+  const slots = []; let h=9,m=0;
+  while(h<17||(h===17&&m<=30)){
+    slots.push(`${h%12===0?12:h%12}:${m===0?"00":m} ${h<12?"AM":"PM"}`);
+    m+=duration; while(m>=60){m-=60;h+=1;}
+  }
+  return slots;
+}
+
+function BookingModal({service, onClose}){
+  const [time,setTime]=useState(null);
+  const [step,setStep]=useState(1);
+  const [form,setForm]=useState({name:"",phone:""});
+  const [submitting,setSubmitting]=useState(false);
+  const slots = useMemo(()=>generateSlots(service.duration_minutes),[service]);
+
+  function confirm(){
+    setSubmitting(true);
+    setTimeout(()=>{ setSubmitting(false); setStep(2); }, 500); // demo mode — swap for real sbInsert when Supabase is wired up
+  }
+
+  return (
+    <div className="overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="panel">
+        <div className="phead">
+          <div className="eyebrow">{step===1?"Pick a time":"Booked"}</div>
+          <button className="pclose" onClick={onClose}>✕</button>
+        </div>
+        {step===1 && (
+          <div>
+            <p style={{marginBottom:14,fontSize:13}}>{service.name} · {service.duration_minutes} min · ${service.price}</p>
+            <div className="time-grid">
+              {slots.map(s=>(
+                <div key={s} className={"time-slot"+(time===s?" selected":"")} onClick={()=>setTime(s)}>{s}</div>
+              ))}
+            </div>
+            <div className="field">
+              <label>Full name</label>
+              <input value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Your name" />
+            </div>
+            <div className="field">
+              <label>Phone</label>
+              <input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})} placeholder="027 000 0000" />
+            </div>
+            <button className="btn" disabled={!time||!form.name||!form.phone||submitting}
+              style={{opacity:(!time||!form.name||!form.phone)?0.4:1}} onClick={confirm}>
+              {submitting?"Booking…":"Confirm Booking"}
+            </button>
+          </div>
+        )}
+        {step===2 && (
+          <div className="confirm">
+            <div className="check"><Check/></div>
+            <h3 style={{fontSize:18,marginBottom:10}}>You're Booked</h3>
+            <p style={{marginBottom:18}}>{service.name} at {time}. Confirmation coming to your phone.</p>
+            <button className="btn" onClick={onClose}>Done</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function App(){
+  const [picked,setPicked]=useState(SERVICES[0]);
+  const [open,setOpen]=useState(false);
+
+  return (
+    <React.Fragment>
+      <div className="top">
+        <div className="brand">
+          <div className="brand-mark">JF</div>
+          <div className="name">JAH FADZ</div>
+          <div className="sub">MĀORI BARBER</div>
+        </div>
+      </div>
+
+      <section className="hero">
+        <div className="wrap">
+          <div className="hero-visual"><CarvingMark/></div>
+          <div className="eyebrow">Māori by culture</div>
+          <h1>Cuts with<br/><span className="accent" style={{color:"var(--gold)"}}>Pride</span></h1>
+          <p className="lead">More than a cut. It's who we are. Book your barber in under a minute.</p>
+        </div>
+      </section>
+
+      <div className="wrap">
+        <div className="quickpick">
+          {SERVICES.map(s=>(
+            <div key={s.id} className={"pick"+(picked.id===s.id?" selected":"")} onClick={()=>setPicked(s)}>
+              <div>
+                <div className="n">{s.name}</div>
+                <div className="d">{s.duration_minutes} min</div>
+              </div>
+              <div className="p">${s.price}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="trust">
+          <div><b>5.0</b>Rated</div>
+          <div><b>3</b>Barbers</div>
+          <div><b>Sat</b>Open</div>
+        </div>
+
+        <div className="info">
+          <div className="row"><a href="tel:0271234567">027 123 4567</a></div>
+          <div className="row">123 Maori Lane, Whanganui</div>
+          <div className="row">Mon–Fri 9–6 · Sat 9–4 · Sun Closed</div>
+        </div>
+      </div>
+
+      <div className="sticky-cta">
+        <div className="wrap">
+          <button className="btn" onClick={()=>setOpen(true)}>Book {picked.name} — ${picked.price} <Arrow/></button>
+        </div>
+      </div>
+
+      {open && <BookingModal service={picked} onClose={()=>setOpen(false)} />}
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
